@@ -1,4 +1,4 @@
-def find_second_max_list(lis):
+def find_second_max_list(ls):
     # read list from file
     with open('exercise2.txt', 'r') as file:
         for line in file:

@@ -1,4 +1,4 @@
-def find_max_in_list(lis):
+def find_max_in_list(ls):
     # read list from file
     with open('exercise1.txt', 'r') as file:
         for line in file:
@@ -8,12 +8,12 @@ def find_max_in_list(lis):
     max_ls = 0
 
     # find max in list
-    for x in lis:
+    for x in ls:
         if x > max_ls:
             max_ls = x
     return max_ls
 
 
 if __name__ == "__main__":
-    ls = []
-    print(find_max_in_list(ls))
+    lis = []
+    print(find_max_in_list(lis))
