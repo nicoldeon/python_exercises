@@ -1,6 +1,3 @@
-import random
-
-
 def find_max_in_list(lis):
     # read list from file
     with open('exercise1.txt', 'r') as file:

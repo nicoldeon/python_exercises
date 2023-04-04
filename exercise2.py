@@ -1,6 +1,3 @@
-import random
-
-
 def find_second_max_list(lis):
     # read list from file
     with open('exercise2.txt', 'r') as file:
