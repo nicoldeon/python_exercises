@@ -52,6 +52,7 @@ class PrimeFactor:
         print(str(num) + " = " + prime_factors)
 
 
-num = PrimeFactor()
-num.set_num()
-num.print_prime_factor()
+if __name__ == '__main__':
+    prime_factor = PrimeFactor()
+    prime_factor.set_num()
+    prime_factor.print_prime_factor()

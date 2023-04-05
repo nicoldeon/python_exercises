@@ -37,15 +37,38 @@ class CalculationAngle:
         else:
             print("Can not let hour empty!")
 
+    # calculate angle between hour hand and minute hand
     def calculate_angle(self):
         hour = self.get_hour()
         minute = self.get_minute()
-        angle_bw_hour_minute = 0
+
+        # reference to 12
+        if hour == 12:
+            hour = 0
+
+        if minute == 60:
+            minute = 0
+            hour += 1
+
+        if hour > 12:
+            hour = hour - 12
+
+        # calculate angle of hour hand, 1 hour -> hour hand move 30 degrees, 1 minute -> hour hand move 6/30 = 0.5 degrees
+        angleHour = hour * 30 + minute * 0.5
+
+        # calculate angle of minute hand, 1 minute -> minute hand move 6 degrees
+        angleMinute = minute * 6
+
+        # calculate angle between hour hand and minute hand
+        ans = abs(angleHour - angleMinute)
+
+        # return min between ans and 360 - ans
+        return min(360 - ans, ans)
 
 
 if __name__ == '__main__':
     cal_angle = CalculationAngle()
     cal_angle.set_hour()
     cal_angle.set_minute()
-    print(cal_angle.get_hour())
-    print(cal_angle.get_minute())
+    angle = cal_angle.calculate_angle()
+    print(angle)
