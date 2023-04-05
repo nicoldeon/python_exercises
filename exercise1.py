@@ -2,23 +2,11 @@ import sys
 import os.path
 
 
-# input file name from command line
-def user_input_file():
-    n = len(sys.argv)
-    file_name = ""
-    if n > 1:
-        file_name = sys.argv[1]
-    else:
-        file_name = "exercise1.txt"
-    return file_name
-
-
 # read list of number from file user input
-def read_from_file():
+def read_from_file(url_file_path):
     ls = []
-    file_name = user_input_file()
-    if os.path.exists(file_name):
-        with open(file_name, 'r') as file:
+    if os.path.exists(url_file_path):
+        with open(url_file_path, 'r') as file:
             for line in file:
                 for num in line.split():
                     ls.append(int(num))
@@ -49,5 +37,13 @@ def find_max_in_list(ls):
 
 
 if __name__ == "__main__":
-    ls = read_from_file()
+    # input file path from command line
+    n = len(sys.argv)
+    url_file_path = ""
+    if n > 1:
+        url_file_path = sys.argv[1]
+    else:
+        url_file_path = "exercise1.txt"
+
+    ls = read_from_file(url_file_path)
     print(find_max_in_list(ls))
