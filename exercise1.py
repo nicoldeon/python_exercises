@@ -3,7 +3,7 @@ import os.path
 
 
 # read list of number from file user input
-def read_from_file(url_file_path):
+def read_from_file(url_file_path='exercise1.txt'):
     ls = []
     if os.path.exists(url_file_path):
         with open(url_file_path, 'r') as file:
@@ -39,11 +39,10 @@ def find_max_in_list(ls):
 if __name__ == "__main__":
     # input file path from command line
     n = len(sys.argv)
-    url_file_path = ""
-    if n > 1:
-        url_file_path = sys.argv[1]
-    else:
-        url_file_path = "exercise1.txt"
 
-    ls = read_from_file(url_file_path)
+    if n > 1:
+        ls = read_from_file(sys.argv[1])
+    else:
+        ls = read_from_file()
+
     print(find_max_in_list(ls))
