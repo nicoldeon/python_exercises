@@ -18,6 +18,7 @@ class PrimeFactor:
             print("Please input a valid number!")
 
     # check if num input is prime number
+
     def is_prime(self, num):
         if num < 2:
             return False
