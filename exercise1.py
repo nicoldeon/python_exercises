@@ -1,4 +1,5 @@
-def read_from_file(ls):
+def read_from_file():
+    ls = []
     with open('exercise1.txt', 'r') as file:
         for line in file:
             for num in line.split():
@@ -27,6 +28,5 @@ def find_max_in_list(ls):
 
 
 if __name__ == "__main__":
-    ls = []
-    read_from_file(ls)
+    ls = read_from_file()
     print(find_max_in_list(ls))

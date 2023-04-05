@@ -1,28 +1,13 @@
-def read_from_file(ls):
+from exercise1 import find_max_in_list
+
+
+def read_from_file():
+    ls = []
     with open('exercise2.txt', 'r') as file:
         for line in file:
             for num in line.split():
                 ls.append(int(num))
     return ls
-
-
-def find_max_in_list(ls):
-    # if length of list is 0, dont exist max value
-    if (len(ls) == 0):
-        return -1
-
-    # if length of list is 1, max element is the only element of the list
-    if len(ls) == 1:
-        return ls[0]
-
-    max_ls = ls[0]
-
-    # find max in list
-    for x in ls[1:]:
-        if x > max_ls:
-            max_ls = x
-
-    return max_ls
 
 
 def find_second_max_list(ls):
@@ -56,6 +41,5 @@ def find_second_max_list(ls):
 
 
 if __name__ == "__main__":
-    ls = []
-    read_from_file(ls)
+    ls = read_from_file()
     print(find_second_max_list(ls))
