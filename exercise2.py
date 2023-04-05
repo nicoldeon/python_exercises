@@ -38,11 +38,16 @@ def find_second_max_list(ls):
     max_ls = find_max_in_list(ls)
     second_max = 0
 
+    # loop to assign element to second_max with condition that element is not equal to max_ls
     for x in ls[:]:
         if x != max_ls:
             second_max = x
             break
+
+    # get index of second_max
     index_scm = ls.index(second_max)
+
+    # find second max in list loop from index_scm + 1
     for x in ls[index_scm+1:]:
         if x > second_max and x < max_ls:
             second_max = x

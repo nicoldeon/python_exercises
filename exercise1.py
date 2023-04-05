@@ -15,9 +15,10 @@ def find_max_in_list(ls):
     if len(ls) == 1:
         return ls[0]
 
+    # assgin max is the first element
     max_ls = ls[0]
 
-    # find max in list
+    # find max in list from the second element
     for x in ls[1:]:
         if x > max_ls:
             max_ls = x
