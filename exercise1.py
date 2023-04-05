@@ -3,6 +3,7 @@ def read_from_file(ls):
         for line in file:
             for num in line.split():
                 ls.append(int(num))
+    return ls
 
 
 def find_max_in_list(ls):
@@ -17,7 +18,7 @@ def find_max_in_list(ls):
     max_ls = ls[0]
 
     # find max in list
-    for x in ls:
+    for x in ls[1:]:
         if x > max_ls:
             max_ls = x
 
