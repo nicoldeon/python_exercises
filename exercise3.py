@@ -42,7 +42,7 @@ class PrimeFactor:
     # print prime factor of that number
     def print_prime_factor(self):
         prime_factors = ""
-        num = self.__num
+        num = self.get_num()
         ls = self.find_prime_factor()
         n = len(ls)
         for i in range(n-1):
