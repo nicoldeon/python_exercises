@@ -1,12 +1,28 @@
 from exercise1 import find_max_in_list
+import sys
+import os.path
+
+
+def user_input_file():
+    n = len(sys.argv)
+    file_name = ""
+    if n > 1:
+        file_name = sys.argv[1]
+    else:
+        file_name = "exercise2.txt"
+    return file_name
 
 
 def read_from_file():
     ls = []
-    with open('exercise2.txt', 'r') as file:
-        for line in file:
-            for num in line.split():
-                ls.append(int(num))
+    file_name = user_input_file()
+    if os.path.exists(file_name):
+        with open(file_name, 'r') as file:
+            for line in file:
+                for num in line.split():
+                    ls.append(int(num))
+    else:
+        print("No such file!")
     return ls
 
 

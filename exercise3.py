@@ -1,17 +1,17 @@
 class PrimeFactor:
     def __init__(self,
                  num=None):
-        self.__num = num
+        self.num = num
 
     def get_num(self):
-        return self.__num
+        return self.num
 
     def set_num(self):
         num = int(input("Input your number you want to find prime factor:"))
         if type(num) == int:
             if num > 0:
-                self.__num = num
-                print("Congrats, the value has been set to: ", self.__num)
+                self.num = num
+                print("Congrats, the value has been set to: ", self.num)
             else:
                 print("Please input a positive number")
         else:
@@ -52,6 +52,6 @@ class PrimeFactor:
         print(str(num) + " = " + prime_factors)
 
 
-A = PrimeFactor()
-A.set_num()
-A.print_prime_factor()
+num = PrimeFactor()
+num.set_num()
+num.print_prime_factor()
