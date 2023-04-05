@@ -3,6 +3,7 @@ import sys
 import os.path
 
 
+# input file name from command line
 def user_input_file():
     n = len(sys.argv)
     file_name = ""
@@ -13,6 +14,7 @@ def user_input_file():
     return file_name
 
 
+# read list of number from file user input
 def read_from_file():
     ls = []
     file_name = user_input_file()
@@ -26,6 +28,7 @@ def read_from_file():
     return ls
 
 
+# find second max element in list
 def find_second_max_list(ls):
     # if length of list is 0, dont exist second max element
     if (len(ls) == 0):
