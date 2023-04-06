@@ -7,18 +7,25 @@ class PrimeFactor:
         return self.num
 
     def set_num(self):
-        num = int(input("Input your number you want to find prime factor:"))
-        if type(num) == int:
-            if num > 0:
-                self.num = num
-                print("Congrats, the value has been set to: ", self.num)
-            else:
-                print("Please input a positive number")
-        else:
-            print("Please input a valid number!")
+        while True:
+            try:
+                num = input("Input a number: ")
+                if num:
+                    num = int(num)
+                    if num > 0:
+                        self.num = num
+                        break
+                    else:
+                        print("Please in put a positive number!")
+                        print()
+                else:
+                    print("You need to input some value!")
+                    print()
+            except ValueError:
+                print("You need to input a number, please try again!")
+                print()
 
     # check if num input is prime number
-
     def is_prime(self, num):
         if num < 2:
             return False

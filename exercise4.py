@@ -9,35 +9,39 @@ class CalculationAngle:
         return self.hour
 
     def set_hour(self):
-        try:
-            hour = input("Input hour: ")
-            if hour:
-                hour = int(hour)
-                if 0 <= hour <= 60:
-                    self.hour = hour
+        while True:
+            try:
+                hour = input("Input hour: ")
+                if hour:
+                    hour = int(hour)
+                    if 0 <= hour <= 24:
+                        self.hour = hour
+                        break
+                    else:
+                        print("Your hour is out of range!")
                 else:
-                    print("Your minute if out of range!")
-            else:
-                print("You need to input some value!")
-        except ValueError:
-            print("You need to input a number!")
+                    print("You need to input some value!")
+            except ValueError:
+                print("You need to input a number!")
 
     def get_minute(self):
         return self.minute
 
     def set_minute(self):
-        try:
-            minute = input("Input minute: ")
-            if minute:
-                minute = int(minute)
-                if 0 <= minute <= 60:
-                    self.minute = minute
+        while True:
+            try:
+                minute = input("Input minute: ")
+                if minute:
+                    minute = int(minute)
+                    if 0 <= minute <= 60:
+                        self.minute = minute
+                        break
+                    else:
+                        print("Your minute is out of range!")
                 else:
-                    print("Your minute if out of range!")
-            else:
-                print("You need to input some value!")
-        except ValueError:
-            print("You need to input a number!")
+                    print("You need to input some value!")
+            except ValueError:
+                print("You need to input a number!")
 
     # calculate angle between hour hand and minute hands
     def check_if_int(self, num):
@@ -75,10 +79,13 @@ class CalculationAngle:
         else:
             print("Please input a hour value and a minute value!")
 
+    def print_angle(self):
+        print("Angle between hour hand and minute hand is: ",
+              self.calculate_angle())
+
 
 if __name__ == '__main__':
     cal_angle = CalculationAngle()
     cal_angle.set_hour()
     cal_angle.set_minute()
-    angle = cal_angle.calculate_angle()
-    print(angle)
+    cal_angle.print_angle()
