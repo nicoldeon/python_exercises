@@ -52,8 +52,8 @@ class CalculationAngle:
                             num = int(num)
                             ls.append(int(num))
                         except ValueError:
-                            print("Type input is not valid!")
                             check_valid = False
+
             if ls and check_valid:
                 return ls
             else:

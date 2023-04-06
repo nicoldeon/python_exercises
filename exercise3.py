@@ -35,6 +35,7 @@ class PrimeFactor:
                             num = int(ele)
                         except ValueError:
                             check_valid = False
+
             if num != 0 and check_valid:
                 return num
             else:
