@@ -1,3 +1,7 @@
+import sys
+import os.path
+
+
 class CalculationAngle:
     def __init__(self,
                  hour=None,
@@ -8,51 +12,58 @@ class CalculationAngle:
     def get_hour(self):
         return self.hour
 
-    def set_hour(self):
-        while True:
-            try:
-                hour = input("Input hour: ")
-                if hour:
-                    hour = int(hour)
-                    if 0 <= hour <= 24:
-                        self.hour = hour
-                        break
-                    else:
-                        print("Your hour is out of range!")
-                        print()
+    def set_hour(self, hour):
+        try:
+            if hour != -1:
+                hour = int(hour)
+                if 0 <= hour <= 24:
+                    self.hour = hour
                 else:
-                    print("You need to input some value!")
-                    print()
-            except ValueError:
-                print("You need to input a number!")
-                print()
+                    print("Your hour is out of range!")
+            else:
+                print("You need to input some value!")
+        except ValueError:
+            print("You need to input a number!")
 
     def get_minute(self):
         return self.minute
 
-    def set_minute(self):
-        while True:
-            try:
-                minute = input("Input minute: ")
-                if minute:
-                    minute = int(minute)
-                    if 0 <= minute <= 60:
-                        self.minute = minute
-                        break
-                    else:
-                        print("Your minute is out of range!")
+    def set_minute(self, minute):
+        try:
+            if minute != -1:
+                minute = int(minute)
+                if 0 <= minute <= 60:
+                    self.minute = minute
                 else:
-                    print("You need to input some value!")
-            except ValueError:
-                print("You need to input a number!")
+                    print("Your minute is out of range!")
+            else:
+                print("You need to input some value!")
+        except ValueError:
+            print("You need to input a number!")
+
+    def read_from_file(self, url_path='exercise4.txt'):
+        ls = []
+        check_valid = True
+        if os.path.exists(url_path):
+            with open(url_path, 'r') as file:
+                for line in file:
+                    for num in line.split():
+                        try:
+                            num = int(num)
+                            ls.append(int(num))
+                        except ValueError:
+                            print("Type input is not valid!")
+                            check_valid = False
+            if ls and check_valid:
+                return ls
+            else:
+                return -1
+        else:
+            return -1
 
     # calculate angle between hour hand and minute hands
-    def check_if_int(self, num):
-        if type(num) == int:
-            return True
-        return False
-
     def calculate_angle(self):
+
         hour = self.get_hour()
         minute = self.get_minute()
 
@@ -80,15 +91,26 @@ class CalculationAngle:
             # return min between ans and 360 - ans
             return min(360 - ans, ans)
         else:
-            print("Please input a hour value and a minute value!")
+            return -1
 
     def print_angle(self):
-        print("Angle between hour hand and minute hand is: ",
-              self.calculate_angle())
+        if self.calculate_angle() != -1:
+            print("Angle between hour hand and minute hand is: ",
+                  self.calculate_angle())
+        else:
+            print("Dont have value to calculate angle between two hands")
 
 
 if __name__ == '__main__':
     cal_angle = CalculationAngle()
-    cal_angle.set_hour()
-    cal_angle.set_minute()
+    n = len(sys.argv)
+    if n > 1:
+        ls = cal_angle.read_from_file(sys.argv[1])
+    else:
+        ls = cal_angle.read_from_file()
+
+    if ls != -1:
+        cal_angle.set_hour(ls[0])
+        cal_angle.set_minute(ls[1])
+
     cal_angle.print_angle()
