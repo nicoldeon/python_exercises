@@ -19,10 +19,13 @@ class CalculationAngle:
                         break
                     else:
                         print("Your hour is out of range!")
+                        print()
                 else:
                     print("You need to input some value!")
+                    print()
             except ValueError:
                 print("You need to input a number!")
+                print()
 
     def get_minute(self):
         return self.minute
