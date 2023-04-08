@@ -2,7 +2,7 @@ import sys
 import os.path
 
 
-class PrimeFactor:
+class Number:
     def __init__(self,
                  num=None):
         self.num = num
@@ -22,6 +22,32 @@ class PrimeFactor:
                     print("Please in put a positive number!")
         except ValueError:
             print("You need to input a number, please try again!")
+
+    def read_from_file(self):
+        pass
+
+    # check if num input is prime number
+    def is_prime(self, num):
+        if num < 2:
+            return False
+        for i in range(2, num):
+            if num % i == 0:
+                return False
+        return True
+
+    def prime_factor(self):
+        ls = []
+        for i in range(2, self.num):
+            while self.num % i == 0 and self.is_prime(i):
+                self.num = int(self.num/i)
+                ls.append(i)
+            else:
+                if i > self.num:
+                    break
+        return ls
+
+
+class PrimeFactor(Number):
 
     def read_from_file(self, url_path='exercise3.txt'):
         check_valid = True
@@ -43,27 +69,14 @@ class PrimeFactor:
         else:
             return -1
 
-    # check if num input is prime number
-    def is_prime(self, num):
-        if num < 2:
-            return False
-        for i in range(2, num):
-            if num % i == 0:
-                return False
-        return True
-
     # find prime factor of that number
+
     def find_prime_factor(self):
         prime_factors = []
         num = self.get_num()
         if num:
-            for i in range(2, num):
-                while num % i == 0 and self.is_prime(i):
-                    num = int(num / i)
-                    prime_factors.append(i)
-                else:
-                    if i > num:
-                        break
+            prime_factors = [factor for factor in range(
+                2, num + 1) if num % factor == 0 and self.is_prime(factor)]
             return prime_factors
         else:
             return -1
@@ -71,6 +84,7 @@ class PrimeFactor:
     # print prime factor of that number
     def print_prime_factor(self):
         prime_factors = ""
+        origin_num = self.get_num()
         num = self.get_num()
 
         if self.find_prime_factor() == -1:
@@ -79,16 +93,17 @@ class PrimeFactor:
             ls = self.find_prime_factor()
 
         if ls:
-            n = len(ls)
-            for i in range(n-1):
-                prime_factors = prime_factors + str(ls[i]) + "x"
-            prime_factors = prime_factors + str(ls[n-1])
-            print(str(num) + " = " + prime_factors)
+            for factor in ls:
+                while num % factor == 0:
+                    prime_factors = prime_factors + str(factor) + "x"
+                    num = int(num / factor)
+            prime_factors = prime_factors.rstrip("x")
+            print(str(origin_num) + " = " + prime_factors)
         else:
             print("Dont have prime factor")
 
 
-if __name__ == '__main__':
+def main():
     prime_factor = PrimeFactor()
     num = 0
     n = len(sys.argv)
@@ -102,3 +117,7 @@ if __name__ == '__main__':
         prime_factor.set_num(num)
 
     prime_factor.print_prime_factor()
+
+
+if __name__ == '__main__':
+    main()
