@@ -26,26 +26,6 @@ class Number:
     def read_from_file(self):
         pass
 
-    # check if num input is prime number
-    def is_prime(self, num):
-        if num < 2:
-            return False
-        for i in range(2, num):
-            if num % i == 0:
-                return False
-        return True
-
-    def prime_factor(self):
-        ls = []
-        for i in range(2, self.num):
-            while self.num % i == 0 and self.is_prime(i):
-                self.num = int(self.num/i)
-                ls.append(i)
-            else:
-                if i > self.num:
-                    break
-        return ls
-
 
 class PrimeFactor(Number):
 
@@ -70,13 +50,14 @@ class PrimeFactor(Number):
             return -1
 
     # find prime factor of that number
-
     def find_prime_factor(self):
         prime_factors = []
         num = self.get_num()
         if num:
+            is_prime = (lambda x: x > 1 and all(
+                x % i != 0 for i in range(2, x)))
             prime_factors = [factor for factor in range(
-                2, num + 1) if num % factor == 0 and self.is_prime(factor)]
+                2, num + 1) if num % factor == 0 and is_prime(factor) if num > factor]
             return prime_factors
         else:
             return -1
