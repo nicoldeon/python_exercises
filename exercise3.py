@@ -70,19 +70,14 @@ class PrimeFactor(Number):
         ls_prime_factor = self.find_prime_factor()
 
         if ls_prime_factor == -1:
-            ls = []
+            print("Dont have prime factor")
         else:
-            ls = ls_prime_factor
-
-        if ls:
-            for factor in ls:
+            for factor in ls_prime_factor:
                 while num % factor == 0:
                     prime_factors = prime_factors + str(factor) + "x"
                     num = int(num / factor)
             prime_factors = prime_factors.rstrip("x")
             print(str(origin_num) + " = " + prime_factors)
-        else:
-            print("Dont have prime factor")
 
 
 def main():
