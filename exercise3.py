@@ -45,36 +45,33 @@ class Number(ABC):
             return -1
 
     @abstractmethod
-    def find_factor(self):
+    def find_prime_factor(self):
         pass
 
 
-class Factor(Number):
-    def find_factor(self):
-        return (lambda x: x > 1 and all(x % i != 0 for i in range(2, x)))
-
-
-class PrimeFactor(Number):
-
-    # find prime factor of that number
-    def find_factor(self):
+class FindPrimeFactor(Number):
+    # find prime factor of number
+    def find_prime_factor(self):
         prime_factors = []
         num = self.get_num()
         if num:
-            # is_prime = (lambda x: x > 1 and all(
-            #     x % i != 0 for i in range(2, x)))
+            is_prime = (lambda x: x > 1 and all(
+                x % i != 0 for i in range(2, x)))
             prime_factors = [factor for factor in range(
-                2, num + 1) if num % factor == 0 and Factor.find_factor(factor)]
+                2, num + 1) if num % factor == 0 and is_prime(factor)]
             return prime_factors
         else:
             return -1
 
-    # print prime factor of that number
-    def print_prime_factor(self):
+
+class PrintPrimeFactor(Number):
+    # print all prime factor of number
+    def find_prime_factor(self):
         prime_factors = ""
         origin_num = self.get_num()
         num = self.get_num()
-        ls_prime_factor = self.find_factor()
+        find_prime = FindPrimeFactor(num)
+        ls_prime_factor = find_prime.find_prime_factor()
 
         if ls_prime_factor == -1:
             print("Dont have prime factor")
@@ -88,7 +85,7 @@ class PrimeFactor(Number):
 
 
 def main():
-    prime_factor = PrimeFactor()
+    prime_factor = PrintPrimeFactor()
     num = 0
     n = len(sys.argv)
 
@@ -100,7 +97,7 @@ def main():
     if num != -1:
         prime_factor.set_num(num)
 
-    prime_factor.print_prime_factor()
+    prime_factor.find_prime_factor()
 
 
 if __name__ == '__main__':
