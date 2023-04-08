@@ -1,8 +1,9 @@
 import sys
 import os.path
+from abc import ABC, abstractmethod
 
 
-class CalculationAngle:
+class Clock(ABC):
     def __init__(self,
                  hour=None,
                  minute=None):
@@ -13,34 +14,20 @@ class CalculationAngle:
         return self.hour
 
     def set_hour(self, hour):
-        try:
-            if hour != -1:
-                hour = int(hour)
-                if 0 <= hour <= 24:
-                    self.hour = hour
-                else:
-                    print("Your hour is out of range!")
-            else:
-                print("You need to input some value!")
-        except ValueError:
-            print("You need to input a number!")
+        self.hour = hour
 
     def get_minute(self):
         return self.minute
 
     def set_minute(self, minute):
-        try:
-            if minute != -1:
-                minute = int(minute)
-                if 0 <= minute <= 60:
-                    self.minute = minute
-                else:
-                    print("Your minute is out of range!")
-            else:
-                print("You need to input some value!")
-        except ValueError:
-            print("You need to input a number!")
+        self.minute = minute
 
+    @abstractmethod
+    def read_from_file():
+        pass
+
+
+class CalculationAngle(Clock):
     def read_from_file(self, url_path='exercise4.txt'):
         ls = []
         check_valid = True
@@ -61,9 +48,34 @@ class CalculationAngle:
         else:
             return -1
 
+    def set_hour(self, hour):
+        try:
+            if hour != -1:
+                hour = int(hour)
+                if 0 <= hour <= 24:
+                    self.hour = hour
+                else:
+                    print("Your hour is out of range!")
+            else:
+                print("You need to input some value!")
+        except ValueError:
+            print("You need to input a number!")
+
+    def set_minute(self, minute):
+        try:
+            if minute != -1:
+                minute = int(minute)
+                if 0 <= minute <= 60:
+                    self.minute = minute
+                else:
+                    print("Your minute is out of range!")
+            else:
+                print("You need to input some value!")
+        except ValueError:
+            print("You need to input a number!")
+
     # calculate angle between hour hand and minute hands
     def calculate_angle(self):
-
         hour = self.get_hour()
         minute = self.get_minute()
 
@@ -80,13 +92,13 @@ class CalculationAngle:
                 hour = hour - 12
 
             # calculate angle of hour hand, 1 hour -> hour hand move 30 degrees, 1 minute -> hour hand move 6/30 = 0.5 degrees
-            angleHour = hour * 30 + minute * 0.5
+            angle_hour = (lambda x, y: x*30 + y*0.5)
 
             # calculate angle of minute hand, 1 minute -> minute hand move 6 degrees
-            angleMinute = minute * 6
+            angle_minute = (lambda x: x*6)
 
             # calculate angle between hour hand and minute hand
-            ans = abs(angleHour - angleMinute)
+            ans = abs(angle_hour(hour, minute) - angle_minute(minute))
 
             # return min between ans and 360 - ans
             return min(360 - ans, ans)
@@ -101,7 +113,7 @@ class CalculationAngle:
             print("Dont have value to calculate angle between two hands")
 
 
-if __name__ == '__main__':
+def main():
     cal_angle = CalculationAngle()
     n = len(sys.argv)
     if n > 1:
@@ -114,3 +126,7 @@ if __name__ == '__main__':
         cal_angle.set_minute(ls[1])
 
     cal_angle.print_angle()
+
+
+if __name__ == '__main__':
+    main()
