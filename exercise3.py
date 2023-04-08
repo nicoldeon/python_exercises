@@ -1,8 +1,9 @@
 import sys
 import os.path
+from abc import ABC, abstractmethod
 
 
-class Number:
+class Number(ABC):
     def __init__(self,
                  num=None):
         self.num = num
@@ -22,12 +23,6 @@ class Number:
                     print("Please in put a positive number!")
         except ValueError:
             print("You need to input a number, please try again!")
-
-    def read_from_file(self):
-        pass
-
-
-class PrimeFactor(Number):
 
     def read_from_file(self, url_path='exercise3.txt'):
         check_valid = True
@@ -49,15 +44,27 @@ class PrimeFactor(Number):
         else:
             return -1
 
+    @abstractmethod
+    def find_factor(self):
+        pass
+
+
+class Factor(Number):
+    def find_factor(self):
+        return (lambda x: x > 1 and all(x % i != 0 for i in range(2, x)))
+
+
+class PrimeFactor(Number):
+
     # find prime factor of that number
-    def find_prime_factor(self):
+    def find_factor(self):
         prime_factors = []
         num = self.get_num()
         if num:
-            is_prime = (lambda x: x > 1 and all(
-                x % i != 0 for i in range(2, x)))
+            # is_prime = (lambda x: x > 1 and all(
+            #     x % i != 0 for i in range(2, x)))
             prime_factors = [factor for factor in range(
-                2, num + 1) if num % factor == 0 and is_prime(factor)]
+                2, num + 1) if num % factor == 0 and Factor.find_factor(factor)]
             return prime_factors
         else:
             return -1
@@ -67,7 +74,7 @@ class PrimeFactor(Number):
         prime_factors = ""
         origin_num = self.get_num()
         num = self.get_num()
-        ls_prime_factor = self.find_prime_factor()
+        ls_prime_factor = self.find_factor()
 
         if ls_prime_factor == -1:
             print("Dont have prime factor")
