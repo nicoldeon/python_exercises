@@ -57,7 +57,7 @@ class PrimeFactor(Number):
             is_prime = (lambda x: x > 1 and all(
                 x % i != 0 for i in range(2, x)))
             prime_factors = [factor for factor in range(
-                2, num + 1) if num % factor == 0 and is_prime(factor) if num > factor]
+                2, num + 1) if num % factor == 0 and is_prime(factor)]
             return prime_factors
         else:
             return -1
@@ -67,11 +67,12 @@ class PrimeFactor(Number):
         prime_factors = ""
         origin_num = self.get_num()
         num = self.get_num()
+        ls_prime_factor = self.find_prime_factor()
 
-        if self.find_prime_factor() == -1:
+        if ls_prime_factor == -1:
             ls = []
         else:
-            ls = self.find_prime_factor()
+            ls = ls_prime_factor
 
         if ls:
             for factor in ls:
