@@ -12,17 +12,10 @@ class Number(ABC):
         return self.num
 
     def set_num(self, num):
-        try:
-            if num == -1:
-                print("You need to input some value!")
-            else:
-                num = int(num)
-                if num > 0:
-                    self.num = num
-                else:
-                    print("Please in put a positive number!")
-        except ValueError:
-            print("You need to input a number, please try again!")
+        if num > 0:
+            self.num = num
+        else:
+            print("Please input a positive number!")
 
     def read_from_file(self, url_path='exercise3.txt'):
         check_valid = True
@@ -49,34 +42,36 @@ class Number(ABC):
         pass
 
 
+class PrimeNumber(Number):
+    # check if number is prime number
+    def find_prime_factor(self):
+        return (lambda x: x > 1 and all(x % i != 0 for i in range(2, x)))
+
+
 class FindPrimeFactor(Number):
     # find prime factor of number
     def find_prime_factor(self):
         prime_factors = []
         num = self.get_num()
         if num:
-            is_prime = (lambda x: x > 1 and all(
-                x % i != 0 for i in range(2, x)))
+            prime_num = PrimeNumber(num)
+            is_prime = prime_num.find_prime_factor()
             prime_factors = [factor for factor in range(
                 2, num + 1) if num % factor == 0 and is_prime(factor)]
             return prime_factors
         else:
             return -1
 
-
-class PrintPrimeFactor(Number):
-    # print all prime factor of number
-    def find_prime_factor(self):
+    # print out prime factos of number
+    def print_prime_factor(self):
         prime_factors = ""
         origin_num = self.get_num()
         num = self.get_num()
-        find_prime = FindPrimeFactor(num)
-        ls_prime_factor = find_prime.find_prime_factor()
-
-        if ls_prime_factor == -1:
+        ls_prime_factors = self.find_prime_factor()
+        if ls_prime_factors == -1:
             print("Dont have prime factor")
         else:
-            for factor in ls_prime_factor:
+            for factor in ls_prime_factors:
                 while num % factor == 0:
                     prime_factors = prime_factors + str(factor) + "x"
                     num = int(num / factor)
@@ -85,7 +80,7 @@ class PrintPrimeFactor(Number):
 
 
 def main():
-    prime_factor = PrintPrimeFactor()
+    prime_factor = FindPrimeFactor()
     num = 0
     n = len(sys.argv)
 
@@ -96,8 +91,10 @@ def main():
 
     if num != -1:
         prime_factor.set_num(num)
+    else:
+        print("You have to input valid number!")
 
-    prime_factor.find_prime_factor()
+    prime_factor.print_prime_factor()
 
 
 if __name__ == '__main__':
