@@ -62,7 +62,7 @@ class Clock(ABC):
 
 class Hour(Clock):
     # calculate angle of hour hand, 1 hour -> hour hand move 30 degrees
-    # 1 minute -> hour hand move 6/30 = 0.5 degrees
+    # 1 minute -> hour hand move 30/60 = 0.5 degrees
     def calc_angle(self):
         return lambda x, y: x*30 + y*0.5
 
