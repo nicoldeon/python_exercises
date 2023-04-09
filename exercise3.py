@@ -55,7 +55,7 @@ class Factor(Number):
 
 
 class FindPrimeFactor(Number):
-    # check if number is a factor of input number and is prime number
+    # check if one number is a factor of input number and is prime number
     def check_num(self, num, factor):
         is_prime = PrimeNumber().check_num()
         check_factor = Factor().check_num()
