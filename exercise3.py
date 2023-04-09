@@ -45,7 +45,7 @@ class Number(ABC):
 class PrimeNumber(Number):
     # check if number is prime number
     def find_prime_factor(self):
-        return (lambda x: x > 1 and all(x % i != 0 for i in range(2, x)))
+        return lambda x: x > 1 and all(x % i != 0 for i in range(2, x))
 
 
 class FindPrimeFactor(Number):

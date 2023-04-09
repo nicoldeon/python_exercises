@@ -78,16 +78,12 @@ class CalculateAngle(Clock):
     def calc_angle(self):
         hour = self.get_hour()
         minute = self.get_minute()
-        hour_cls = Hour(hour, minute)
-        minute_cls = Minute(hour, minute)
         if hour and minute:
-
             hour, minute = self.convert_time(hour, minute)
-            hour_ans = hour_cls.calc_angle()
-            min_ans = minute_cls.calc_angle()
-
+            get_hour_ans = Hour().calc_angle()
+            get_mins_ans = Minute().calc_angle()
             # calculate angle between hour hand and minute hand
-            ans = abs(hour_ans(hour, minute) - min_ans(minute))
+            ans = abs(get_hour_ans(hour, minute) - get_mins_ans(minute))
             # return min between ans and 360 - ans
             return min(360 - ans, ans)
         else:
