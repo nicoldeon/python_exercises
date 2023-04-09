@@ -14,46 +14,29 @@ class Clock(ABC):
         return self.hour
 
     def set_hour(self, hour):
-        try:
-            if hour != -1:
-                hour = int(hour)
-                if 0 <= hour <= 24:
-                    self.hour = hour
-                else:
-                    print("Your hour is out of range!")
-            else:
-                print("You need to input some value!")
-        except ValueError:
-            print("You need to input a number!")
+        if 0 <= hour <= 24:
+            self.hour = hour
+        else:
+            print("Your hour is out of range!")
 
     def get_minute(self):
         return self.minute
 
     def set_minute(self, minute):
-        try:
-            if minute != -1:
-                minute = int(minute)
-                if 0 <= minute <= 60:
-                    self.minute = minute
-                else:
-                    print("Your minute is out of range!")
-            else:
-                print("You need to input some value!")
-        except ValueError:
-            print("You need to input a number!")
+        if 0 <= minute <= 60:
+            self.minute = minute
+        else:
+            print("Your minute is out of range!")
 
     def read_from_file(self, url_path='exercise4.txt'):
-        ls = []
         check_valid = True
+        ls = []
         if os.path.exists(url_path):
             with open(url_path, 'r') as file:
-                for line in file:
-                    for num in line.split():
-                        try:
-                            num = int(num)
-                            ls.append(int(num))
-                        except ValueError:
-                            check_valid = False
+                try:
+                    ls = [int(num) for line in file for num in line.split()]
+                except ValueError:
+                    check_valid = False
 
             if ls and check_valid:
                 return ls
@@ -62,76 +45,60 @@ class Clock(ABC):
         else:
             return -1
 
+    def convert_time(self, hour, minute):
+        if hour == 24:
+            hour = 0
+        if hour > 12:
+            hour = hour - 12
+        if minute == 60:
+            minute = 0
+            hour += 1
+        return hour, minute
+
     @abstractmethod
     def calc_angle(self):
         pass
 
 
-class CalculateHourAngle(Clock):
+class Hour(Clock):
+    # calculate angle of hour hand, 1 hour -> hour hand move 30 degrees
+    # 1 minute -> hour hand move 6/30 = 0.5 degrees
     def calc_angle(self):
-        hour = self.get_hour()
-        minute = self.get_minute()
-        if hour and minute:
-            if hour == 24:
-                hour = 0
-            if hour > 12:
-                hour = hour - 12
-            if minute == 60:
-                minute = 0
-                hour += 1
-
-            # calculate angle of hour hand, 1 hour -> hour hand move 30 degrees, 1 minute -> hour hand move 6/30 = 0.5 degrees
-            get_hour_ans = (lambda x, y: x*30 + y*0.5)
-            return get_hour_ans(hour, minute)
-        else:
-            return -1
+        return lambda x, y: x*30 + y*0.5
 
 
-class CalculateMinuteAngle(Clock):
+class Minute(Clock):
+    # calculate angle of minute hand, 1 minute -> minute hand move 6 degrees
     def calc_angle(self):
-        hour = self.get_hour()
-        minute = self.get_minute()
-        if hour and minute:
-            if hour == 24:
-                hour = 0
-            if hour > 12:
-                hour = hour - 12
-            if minute == 60:
-                minute = 0
-                hour += 1
-            # calculate angle of minute hand, 1 minute -> minute hand move 6 degrees
-            get_minute_ans = (lambda x: x*6)
-            return get_minute_ans(minute)
-        else:
-            return -1
+        return lambda x: x*6
 
 
 class CalculateAngle(Clock):
     # calculate angle between hour hand and minute hands
     def calc_angle(self):
-
         hour = self.get_hour()
         minute = self.get_minute()
-        hour_ans = CalculateHourAngle(hour, minute)
-        min_ans = CalculateMinuteAngle(hour, minute)
-
+        hour_cls = Hour(hour, minute)
+        minute_cls = Minute(hour, minute)
         if hour and minute:
+
+            hour, minute = self.convert_time(hour, minute)
+            hour_ans = hour_cls.calc_angle()
+            min_ans = minute_cls.calc_angle()
+
             # calculate angle between hour hand and minute hand
-            if hour_ans.calc_angle() != -1 and min_ans.calc_angle != -1:
-                ans = abs(hour_ans.calc_angle() -
-                          min_ans.calc_angle())
-                # return min between ans and 360 - ans
-                return min(360 - ans, ans)
-            else:
-                return -1
+            ans = abs(hour_ans(hour, minute) - min_ans(minute))
+            # return min between ans and 360 - ans
+            return min(360 - ans, ans)
         else:
             return -1
 
+    # print angle between hour hand and minute hand
     def print_angle(self):
         ans = self.calc_angle()
         if ans != -1:
             print("Angle between hour hand and minute hand is: ",
-                  self.calc_angle())
+                  ans)
         else:
             print("Dont have value to calculate angle between two hands")
 
@@ -139,6 +106,7 @@ class CalculateAngle(Clock):
 def main():
     cal_angle = CalculateAngle()
     n = len(sys.argv)
+
     if n > 1:
         ls = cal_angle.read_from_file(sys.argv[1])
     else:
@@ -147,6 +115,8 @@ def main():
     if ls != -1:
         cal_angle.set_hour(ls[0])
         cal_angle.set_minute(ls[1])
+    else:
+        print("You have to input valid value")
 
     cal_angle.print_angle()
 
