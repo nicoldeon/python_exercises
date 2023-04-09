@@ -54,8 +54,7 @@ class FindPrimeFactor(Number):
         prime_factors = []
         num = self.get_num()
         if num:
-            prime_num = PrimeNumber(num)
-            is_prime = prime_num.find_prime_factor()
+            is_prime = PrimeNumber().find_prime_factor()
             prime_factors = [factor for factor in range(
                 2, num + 1) if num % factor == 0 and is_prime(factor)]
             return prime_factors
