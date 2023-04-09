@@ -49,7 +49,7 @@ class PrimeNumber(Number):
 
 
 class Factor(Number):
-    # check if number x is a factor of number y
+    # check if number y is a factor of number x
     def check_num(self):
         return lambda x, y: x % y == 0
 
