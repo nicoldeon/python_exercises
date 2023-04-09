@@ -34,7 +34,7 @@ class Clock(ABC):
         if os.path.exists(url_path):
             with open(url_path, 'r') as file:
                 try:
-                    ls = [int(num) for line in file for num in line.split()]
+                    ls = [int(num) for line in file for num in line.split(":")]
                 except ValueError:
                     check_valid = False
 

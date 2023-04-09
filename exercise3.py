@@ -38,25 +38,38 @@ class Number(ABC):
             return -1
 
     @abstractmethod
-    def find_prime_factor(self):
+    def check_num(self):
         pass
 
 
 class PrimeNumber(Number):
     # check if number is prime number
-    def find_prime_factor(self):
+    def check_num(self):
         return lambda x: x > 1 and all(x % i != 0 for i in range(2, x))
 
 
+class Factor(Number):
+    # check if number x is a factor of number y
+    def check_num(self):
+        return lambda x, y: x % y == 0
+
+
 class FindPrimeFactor(Number):
+    # check if number is a factor of input number and is prime number
+    def check_num(self, num, factor):
+        is_prime = PrimeNumber().check_num()
+        check_factor = Factor().check_num()
+        if check_factor(num, factor) and is_prime(factor):
+            return True
+        return False
+
     # find prime factor of number
     def find_prime_factor(self):
         prime_factors = []
         num = self.get_num()
         if num:
-            is_prime = PrimeNumber().find_prime_factor()
             prime_factors = [factor for factor in range(
-                2, num + 1) if num % factor == 0 and is_prime(factor)]
+                2, num + 1) if self.check_num(num, factor)]
             return prime_factors
         else:
             return -1
