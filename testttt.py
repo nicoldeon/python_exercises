@@ -97,6 +97,7 @@ class CalculateAngle(Clock):
                   ans)
         else:
             print("Dont have value to calculate angle between two hands")
+            print()
 
 
 def main():
