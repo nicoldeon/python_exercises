@@ -3,7 +3,27 @@ import os.path
 from abc import ABC, abstractmethod
 
 
-class Clock:
+class ClockAngle(ABC):
+
+    @abstractmethod
+    def get_angle(self):
+        pass
+
+
+class HourAngle(ClockAngle):
+    # calculate angle of hour hand, 1 hour -> hour hand move 30 degrees
+    # 1 minute -> hour hand move 30/60 = 0.5 degrees
+    def get_angle(self, hour, minute):
+        return hour * 30 + minute * 0.5
+
+
+class MinuteAngle(ClockAngle):
+    # calculate angle of minute hand, 1 minute -> minute hand move 6 degrees
+    def get_angle(self, minute):
+        return minute * 6
+
+
+class Clock(ClockAngle):
     def __init__(self,
                  hour=None,
                  minute=None,
@@ -63,35 +83,13 @@ class Clock:
             hour += 1
         return hour, minute
 
-    def calc_angle(self):
+    def get_angle(self):
         self.hour, self.minute = self.convert_time(self.hour, self.minute)
-        hour_ans = HourAngle(self)
-        mins_ans = MinuteAngle(self)
-        ans = abs(hour_ans.get_angle() - mins_ans.get_angle())
+        hour_ans = HourAngle()
+        mins_ans = MinuteAngle()
+        ans = abs(hour_ans.get_angle(
+            self.hour, self.minute) - mins_ans.get_angle(self.minute))
         return min(360 - ans, ans)
-
-
-class ClockAngle(ABC):
-    def __init__(self,
-                 clock):
-        self.clock = clock
-
-    @abstractmethod
-    def get_angle(self):
-        pass
-
-
-class HourAngle(ClockAngle):
-    # calculate angle of hour hand, 1 hour -> hour hand move 30 degrees
-    # 1 minute -> hour hand move 30/60 = 0.5 degrees
-    def get_angle(self):
-        return self.clock.get_hour() * 30 + self.clock.get_minute() * 0.5
-
-
-class MinuteAngle(ClockAngle):
-    # calculate angle of minute hand, 1 minute -> minute hand move 6 degrees
-    def get_angle(self):
-        return self.clock.get_minute() * 6
 
 
 def main():
@@ -107,7 +105,7 @@ def main():
     if ls != -1:
         clock.set_hour(ls[0])
         clock.set_minute(ls[1])
-        ans = clock.calc_angle()
+        ans = clock.get_angle()
         if ans:
             print("Angle between hour and minute hand is: ", ans)
         else:
