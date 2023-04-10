@@ -17,27 +17,8 @@ class HourAngle(ClockAngle):
         self.hour = hour
         self.minute = minute
 
-    def get_hour(self):
-        return self.hour
-
-    def set_hour(self, hour):
-        if 0 <= hour <= 24:
-            self.hour = hour
-        else:
-            print("Your hour is out of range!")
-
-    def get_minute(self):
-        return self.minute
-
-    def set_minute(self, minute):
-        if 0 <= minute <= 60:
-            self.minute = minute
-        else:
-            print("Your minute is out of range!")
-
     # calculate angle of hour hand, 1 hour -> hour hand move 30 degrees
     # 1 minute -> hour hand move 30/60 = 0.5 degrees
-
     def get_angle(self):
         return self.hour * 30 + self.minute * 0.5
 
@@ -46,24 +27,6 @@ class MinuteAngle(ClockAngle):
     def __init__(self,
                  minute=None):
         self.minute = minute
-
-    def get_hour(self):
-        return self.hour
-
-    def set_hour(self, hour):
-        if 0 <= hour <= 24:
-            self.hour = hour
-        else:
-            print("Your hour is out of range!")
-
-    def get_minute(self):
-        return self.minute
-
-    def set_minute(self, minute):
-        if 0 <= minute <= 60:
-            self.minute = minute
-        else:
-            print("Your minute is out of range!")
 
     # calculate angle of minute hand, 1 minute -> minute hand move 6 degrees
     def get_angle(self):
@@ -77,6 +40,24 @@ class Clock:
                  second=None):
         self.hour_ans = HourAngle(hour, minute)
         self.minute_ans = MinuteAngle(minute)
+
+    def get_hour(self):
+        return self.hour
+
+    def set_hour(self, hour):
+        if 0 <= hour <= 24:
+            self.hour = hour
+        else:
+            print("Your hour is out of range!")
+
+    def get_minute(self):
+        return self.minute
+
+    def set_minute(self, minute):
+        if 0 <= minute <= 60:
+            self.minute = minute
+        else:
+            print("Your minute is out of range!")
 
     def get_second(self):
         return self.second
