@@ -4,23 +4,32 @@ from abc import ABC, abstractmethod
 
 
 class ClockAngle(ABC):
-
     @abstractmethod
     def get_angle(self):
         pass
 
 
 class HourAngle(ClockAngle):
+    def __init__(self,
+                 hour=None,
+                 minute=None):
+        self.hour = hour
+        self.minute = minute
+
     # calculate angle of hour hand, 1 hour -> hour hand move 30 degrees
     # 1 minute -> hour hand move 30/60 = 0.5 degrees
-    def get_angle(self, hour, minute):
-        return hour * 30 + minute * 0.5
+    def get_angle(self):
+        return self.hour * 30 + self.minute * 0.5
 
 
 class MinuteAngle(ClockAngle):
+    def __init__(self,
+                 minute=None):
+        self.minute = minute
     # calculate angle of minute hand, 1 minute -> minute hand move 6 degrees
-    def get_angle(self, minute):
-        return minute * 6
+
+    def get_angle(self):
+        return self.minute * 6
 
 
 class Clock(ClockAngle):
@@ -85,10 +94,9 @@ class Clock(ClockAngle):
 
     def get_angle(self):
         self.hour, self.minute = self.convert_time(self.hour, self.minute)
-        hour_ans = HourAngle()
-        mins_ans = MinuteAngle()
-        ans = abs(hour_ans.get_angle(
-            self.hour, self.minute) - mins_ans.get_angle(self.minute))
+        hour_ans = HourAngle(self.hour, self.minute)
+        mins_ans = MinuteAngle(self.minute)
+        ans = abs(hour_ans.get_angle() - mins_ans.get_angle())
         return min(360 - ans, ans)
 
 
