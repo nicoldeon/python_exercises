@@ -32,7 +32,7 @@ class MinuteAngle(ClockAngle):
         return self.minute * 6
 
 
-class Clock(ClockAngle):
+class Clock:
     def __init__(self,
                  hour=None,
                  minute=None,
@@ -92,7 +92,7 @@ class Clock(ClockAngle):
             hour += 1
         return hour, minute
 
-    def get_angle(self):
+    def calc_angle(self):
         self.hour, self.minute = self.convert_time(self.hour, self.minute)
         hour_ans = HourAngle(self.hour, self.minute)
         mins_ans = MinuteAngle(self.minute)
@@ -113,7 +113,7 @@ def main():
     if ls != -1:
         clock.set_hour(ls[0])
         clock.set_minute(ls[1])
-        ans = clock.get_angle()
+        ans = clock.calc_angle()
         if ans:
             print("Angle between hour and minute hand is: ", ans)
         else:
