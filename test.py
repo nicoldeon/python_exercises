@@ -63,20 +63,20 @@ class Clock:
             hour += 1
         return hour, minute
 
-    def calc_hour_minute_angle(self):
+    def get_angle(self):
         hour = self.get_hour()
         minute = self.get_minute()
         hour, minute = self.convert_time(hour, minute)
-        calc_hour_ans = HourAngle(hour, minute, self.second)
-        calc_mins_ans = MinuteAngle(hour, minute, self.second)
+        calc_hour_ans = HourAngle(self)
+        calc_mins_ans = MinuteAngle(self)
         if hour and minute:
-            ans = abs(calc_hour_ans.calc_angle() - calc_mins_ans.calc_angle())
+            ans = abs(calc_hour_ans.get_angle() - calc_mins_ans.get_angle())
             return min(360 - ans, ans)
         else:
             return -1
 
     def print_angle(self):
-        ans = self.calc_hour_minute_angle()
+        ans = self.get_angle()
         if ans != -1:
             print("Ans between hour hand and minute hand is: ", ans)
         else:
@@ -85,32 +85,29 @@ class Clock:
 
 class ClockAngle(ABC):
     def __init__(self,
-                 hour=None,
-                 minute=None,
-                 second=None):
-        self.hour = hour
-        self.minute = minute
-        self.second = second
+                 clock):
+        self.clock = clock
 
     @abstractmethod
-    def calc_angle(self):
+    def get_angle(self):
         pass
 
 
 class HourAngle(ClockAngle):
     # calculate angle of hour hand, 1 hour -> hour hand move 30 degrees
     # 1 minute -> hour hand move 30/60 = 0.5 degrees
-    def calc_angle(self):
-        return self.hour * 30 + self.minute * 0.5
+    def get_angle(self):
+        return self.clock.get_hour() * 30 + self.clock.get_minute() * 0.5
 
 
 class MinuteAngle(ClockAngle):
     # calculate angle of minute hand, 1 minute -> minute hand move 6 degrees
-    def calc_angle(self):
-        return self.minute * 6
+    def get_angle(self):
+        return self.clock.get_minute() * 6
 
 
 def main():
+
     clock = Clock()
     n = len(sys.argv)
 
