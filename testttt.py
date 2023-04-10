@@ -3,14 +3,12 @@ import os.path
 from abc import ABC, abstractmethod
 
 
-class Clock:
+class Clock(ABC):
     def __init__(self,
                  hour=None,
-                 minute=None,
-                 second=None):
+                 minute=None):
         self.hour = hour
         self.minute = minute
-        self.second = second
 
     def get_hour(self):
         return self.hour
@@ -30,23 +28,17 @@ class Clock:
         else:
             print("Your minute is out of range!")
 
-    def get_second(self):
-        return self.second
-
-    def set_second(self, second):
-        self.second = second
-
     def read_from_file(self, url_path='exercise4.txt'):
-        valid = True
+        check_valid = True
         ls = []
         if os.path.exists(url_path):
             with open(url_path, 'r') as file:
                 try:
                     ls = [int(num) for line in file for num in line.split(":")]
                 except ValueError:
-                    valid = False
-            check_valid = (lambda x, y: x if x and valid else -1)
-            if check_valid(ls, valid) != -1:
+                    check_valid = False
+
+            if ls and check_valid:
                 return ls
             else:
                 return -1
@@ -63,57 +55,66 @@ class Clock:
             hour += 1
         return hour, minute
 
-    def calc_angle(self):
-        self.hour, self.minute = self.convert_time(self.hour, self.minute)
-        hour_ans = HourAngle(self)
-        mins_ans = MinuteAngle(self)
-        ans = abs(hour_ans.get_angle() - mins_ans.get_angle())
-        return min(360 - ans, ans)
-
-
-class ClockAngle(ABC):
-    def __init__(self,
-                 clock):
-        self.clock = clock
-
     @abstractmethod
-    def get_angle(self):
+    def calc_angle(self):
         pass
 
 
-class HourAngle(ClockAngle):
+class Hour(Clock):
     # calculate angle of hour hand, 1 hour -> hour hand move 30 degrees
     # 1 minute -> hour hand move 30/60 = 0.5 degrees
-    def get_angle(self):
-        return self.clock.get_hour() * 30 + self.clock.get_minute() * 0.5
+    def calc_angle(self):
+        return lambda x, y: x*30 + y*0.5
 
 
-class MinuteAngle(ClockAngle):
+class Minute(Clock):
     # calculate angle of minute hand, 1 minute -> minute hand move 6 degrees
-    def get_angle(self):
-        return self.clock.get_minute() * 6
+    def calc_angle(self):
+        return lambda x: x*6
+
+
+class CalculateAngle(Clock):
+    # calculate angle between hour hand and minute hands
+    def calc_angle(self):
+        hour = self.get_hour()
+        minute = self.get_minute()
+        if hour and minute:
+            hour, minute = self.convert_time(hour, minute)
+            get_hour_ans = Hour().calc_angle()
+            get_mins_ans = Minute().calc_angle()
+            # calculate angle between hour hand and minute hand
+            ans = abs(get_hour_ans(hour, minute) - get_mins_ans(minute))
+            # return min between ans and 360 - ans
+            return min(360 - ans, ans)
+        else:
+            return -1
+
+    # print angle between hour hand and minute hand
+    def print_angle(self):
+        ans = self.calc_angle()
+        if ans != -1:
+            print("Angle between hour hand and minute hand is: ",
+                  ans)
+        else:
+            print("Dont have value to calculate angle between two hands")
 
 
 def main():
-
-    clock = Clock()
+    cal_angle = CalculateAngle()
     n = len(sys.argv)
 
     if n > 1:
-        ls = clock.read_from_file(sys.argv[1])
+        ls = cal_angle.read_from_file(sys.argv[1])
     else:
-        ls = clock.read_from_file()
+        ls = cal_angle.read_from_file()
 
     if ls != -1:
-        clock.set_hour(ls[0])
-        clock.set_minute(ls[1])
-        ans = clock.calc_angle()
-        if ans:
-            print("Angle between hour and minute hand is: ", ans)
-        else:
-            print("Don't have angle between hour hand minute hand!")
+        cal_angle.set_hour(ls[0])
+        cal_angle.set_minute(ls[1])
     else:
         print("You have to input valid value")
+
+    cal_angle.print_angle()
 
 
 if __name__ == '__main__':

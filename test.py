@@ -37,16 +37,16 @@ class Clock:
         self.second = second
 
     def read_from_file(self, url_path='exercise4.txt'):
-        valid = True
+        check_valid = True
         ls = []
         if os.path.exists(url_path):
             with open(url_path, 'r') as file:
                 try:
                     ls = [int(num) for line in file for num in line.split(":")]
                 except ValueError:
-                    valid = False
-            check_valid = (lambda x, y: x if x and valid else -1)
-            if check_valid(ls, valid) != -1:
+                    check_valid = False
+
+            if ls and check_valid:
                 return ls
             else:
                 return -1
@@ -64,11 +64,23 @@ class Clock:
         return hour, minute
 
     def calc_angle(self):
-        self.hour, self.minute = self.convert_time(self.hour, self.minute)
+        hour = self.get_hour()
+        minute = self.get_minute()
+        hour, minute = self.convert_time(hour, minute)
         hour_ans = HourAngle(self)
         mins_ans = MinuteAngle(self)
-        ans = abs(hour_ans.get_angle() - mins_ans.get_angle())
-        return min(360 - ans, ans)
+        if hour and minute:
+            ans = abs(hour_ans.get_angle() - mins_ans.get_angle())
+            return min(360 - ans, ans)
+        else:
+            return -1
+
+    def print_angle(self):
+        ans = self.calc_angle()
+        if ans != -1:
+            print("Ans between hour hand and minute hand is: ", ans)
+        else:
+            print("Don't have value to calculate ans!")
 
 
 class ClockAngle(ABC):
@@ -107,13 +119,10 @@ def main():
     if ls != -1:
         clock.set_hour(ls[0])
         clock.set_minute(ls[1])
-        ans = clock.calc_angle()
-        if ans:
-            print("Angle between hour and minute hand is: ", ans)
-        else:
-            print("Don't have angle between hour hand minute hand!")
     else:
         print("You have to input valid value")
+
+    clock.print_angle()
 
 
 if __name__ == '__main__':
