@@ -17,12 +17,13 @@ class Number(ABC):
         else:
             print("Please input a positive number!")
 
-    def read_from_file(self, url_path='exercise3.txt'):
+    @classmethod
+    def read_from_file(self, url_path='exercise3.txt', *agrs, **kwargs):
         check_valid = True
         num = 0
 
         if os.path.exists(url_path):
-            with open(url_path, 'r') as file:
+            with open(url_path, *agrs, **kwargs) as file:
                 for line in file:
                     for ele in line.split():
                         try:
@@ -43,8 +44,12 @@ class Number(ABC):
 
 
 class PrimeNumber(Number):
+    def __init__(self, num=None):
+        super().__init__(num)
+
     # check if number is prime number
-    def check_num(self, num):
+    @staticmethod
+    def check_num(num):
         if num < 2:
             return False
         for i in range(2, num):
@@ -54,28 +59,33 @@ class PrimeNumber(Number):
 
 
 class Factor(Number):
+    def __init__(self, num=None):
+        super().__init__(num)
+
     # check if number y is a factor of number x
-    def check_num(self, factor):
-        if self.num % factor == 0:
+    @staticmethod
+    def check_num(num, factor):
+        if num % factor == 0:
             return True
         return False
 
 
 class PrimeFactor(Number):
+    def __init__(self, num=None):
+        super().__init__(num)
+
     def check_num(self):
         pass
 
-        # find prime factor of number
+    # find prime factor of number
     def find_prime_factor(self):
         prime_factors = []
         num = self.get_num()
-        check_is_prime = PrimeNumber(self.num)
-        check_factor = Factor(self.num)
         if num:
             factors = [factor for factor in range(
-                2, num + 1) if check_factor.check_num(factor)]
+                2, num + 1) if Factor.check_num(num, factor)]
             prime_factors = list(
-                filter(lambda x: check_is_prime.check_num(x), factors))
+                filter(lambda x: PrimeNumber.check_num(x), factors))
             return prime_factors
         else:
             return -1
@@ -98,21 +108,19 @@ class PrimeFactor(Number):
 
 
 def main():
-    prime_factor = PrimeFactor()
     num = 0
     n = len(sys.argv)
 
     if n > 1:
-        num = prime_factor.read_from_file(sys.argv[1])
+        num = PrimeFactor.read_from_file(sys.argv[1], mode='r')
     else:
-        num = prime_factor.read_from_file()
+        num = PrimeFactor.read_from_file(mode='r')
 
     if num != -1:
-        prime_factor.set_num(num)
+        prime_factor = PrimeFactor(num)
+        prime_factor.print_prime_factor()
     else:
         print("You have to input valid number!")
-
-    prime_factor.print_prime_factor()
 
 
 if __name__ == '__main__':
