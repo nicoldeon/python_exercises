@@ -18,10 +18,7 @@ class MinuteAngle(ClockAngle):
         return self.minute
 
     def set_minute(self, minute):
-        if 0 <= minute <= 60:
-            self.minute = minute
-        else:
-            self.minute = -1
+        self.minute = minute
 
     def get_angle(self):
         return self.minute*6
@@ -30,36 +27,27 @@ class MinuteAngle(ClockAngle):
 class HourAngle(ClockAngle):
     def __init__(self,
                  hour=None,
-                 minute_ans=None):
+                 MinuteAngle=None):
         self.hour = hour
-        self.minute_ans = MinuteAngle()
+        self.minute_ans = MinuteAngle
 
     def get_hour(self):
         return self.hour
 
     def set_hour(self, hour):
-        if 0 <= hour <= 24:
-            self.hour = hour
-        else:
-            self.hour = -1
+        self.hour = hour
 
     def get_minute_ans(self):
         return self.minute_ans
 
-    def set_minute_ans(self, minute_ans):
-        self.minute_ans = minute_ans
+    def set_minute_ans(self, MinuteAngle):
+        self.minute_ans = MinuteAngle
 
     def get_angle(self):
         return self.hour*30 + self.get_minute_ans().get_minute()*0.5
 
 
 class Clock:
-    def __init__(self,
-                 hour=None,
-                 minute=None):
-        self.minute_ans = MinuteAngle(minute)
-        self.hour_ans = HourAngle(hour, self.minute_ans)
-
     def read_from_file(self, url_path='exercise4.txt'):
         valid = True
         ls = []
@@ -77,27 +65,23 @@ class Clock:
         else:
             return -1
 
-    def convert_time(self):
-        hour = self.hour_ans.get_hour()
-        minute = self.minute_ans.get_minute()
-        if hour == 12:
-            hour = 0
-        if hour > 12:
-            hour -= 12
-        if minute == 60:
-            minute = 0
-            hour += 1
-        self.hour_ans.set_hour(hour)
-        self.hour_ans.get_minute_ans().set_minute(minute)
-
     # calculate angle between hour hand and minute hand
-    def calc_angle(self):
-        self.convert_time()
-        hour = self.hour_ans.get_hour()
-        mins = self.hour_ans.get_minute_ans().get_minute()
-        if hour != -1 and mins != -1:
-            calc_hour_ans = self.hour_ans.get_angle()
-            calc_mins_ans = self.hour_ans.get_minute_ans().get_angle()
+    def calc_angle(self, hour, minute):
+        if 0 <= hour <= 24 and 0 <= minute <= 60:
+            if hour == 12:
+                hour = 0
+            if hour > 12:
+                hour -= 12
+            if minute == 60:
+                minute = 0
+                hour += 1
+        else:
+            hour = -1
+            minute = -1
+        hour_ans = HourAngle(hour, MinuteAngle(minute))
+        if hour_ans.get_hour() != -1 and hour_ans.get_minute_ans().get_minute() != -1:
+            calc_hour_ans = hour_ans.get_angle()
+            calc_mins_ans = hour_ans.get_minute_ans().get_angle()
             ans = abs(calc_hour_ans - calc_mins_ans)
             return min(360 - ans, ans)
         else:
@@ -115,8 +99,7 @@ def main():
         ls = clock.read_from_file()
 
     if ls != -1:
-        calc_ans = Clock(ls[0], ls[1])
-        ans = calc_ans.calc_angle()
+        ans = clock.calc_angle(ls[0], ls[1])
         if ans:
             print("Angle between hour and minute hand is: ", ans)
         else:
