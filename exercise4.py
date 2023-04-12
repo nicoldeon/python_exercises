@@ -9,7 +9,7 @@ class ClockAngle(ABC):
 
     @abstractmethod
     def get_angle(self):
-        pass
+        raise NotImplementedError("Subclass must be implemented this method")
 
 
 class MinuteAngle(ClockAngle):
@@ -55,7 +55,7 @@ class HourAngle(ClockAngle):
     # calculate angle of hour hand, 1 hour -> hour hand move 60 degrees
     # one minute -> hour hand move 30/60 = 0.5 degrees
     def get_angle(self):
-        return self.get_hour()*30 + self.get_minute_ans().get_minute()*0.5
+        return (self.get_hour()*30 + self.get_minute_ans().get_minute()*0.5)*-1
 
 
 class Clock:
@@ -114,16 +114,8 @@ class Clock:
 
     # calculate angle between hour hand and minute hand
     def calc_angle(self):
-        calc_hour_ans = 0
-        calc_mins_ans = 0
-        ans = 0
-        for hand in self.ls_hands:
-            if isinstance(hand, HourAngle):
-                calc_hour_ans = hand.get_angle()
-            if isinstance(hand, MinuteAngle):
-                calc_mins_ans = hand.get_angle()
-        ans = abs(calc_hour_ans - calc_mins_ans)
-        return min(360 - ans, ans)
+        ans = abs(sum([hand.get_angle() for hand in self.ls_hands]))
+        return ans
 
 
 def main():
