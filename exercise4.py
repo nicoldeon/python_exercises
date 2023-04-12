@@ -59,19 +59,14 @@ class HourAngle(ClockAngle):
 
 
 class Clock:
-    def __init__(self, hourAngle=HourAngle(), minuteAngle=MinuteAngle()):
-        self.hour_ans = hourAngle
-        self.minute_ans = minuteAngle
-        self.hands = [
-            self.hour_ans,
-            self.minute_ans
-        ]
+    def __init__(self, ls_hands=None):
+        self.ls_hands = ls_hands
 
-    def get_hour_ans(self):
-        return self.hour_ans
+    def get_ls_ans_hands(self):
+        return self.ls_hands
 
-    def set_hour_ans(self, hourAngle):
-        self.hour_ans = hourAngle
+    def set_ls_ans_hands(self, ls_hands):
+        self.ls_hands = ls_hands
 
     # convert time reference to 12
     @staticmethod
@@ -107,7 +102,8 @@ class Clock:
                 ls[0], ls[1] = Clock.convert_time(ls[0], ls[1])
                 hour_ans = HourAngle(ls[0], MinuteAngle(ls[1]))
                 mins_ans = MinuteAngle(ls[1])
-                return cls(hour_ans, mins_ans)
+                ls_angle = [hour_ans, mins_ans]
+                return cls(ls_angle)
             else:
                 return -1
         else:
@@ -115,15 +111,16 @@ class Clock:
 
     # calculate angle between hour hand and minute hand
     def calc_angle(self):
-        hour = self.hour_ans.get_hour()
-        minute = self.minute_ans.get_minute()
-        if hour != -1 and minute != -1:
-            ans = 0
-            for hand in self.hands:
-                ans = abs(ans - hand.get_angle())
-            return min(360 - ans, ans)
-        else:
-            return -1
+        calc_hour_ans = 0
+        calc_mins_ans = 0
+        ans = 0
+        for hand in self.ls_hands:
+            if isinstance(hand, HourAngle):
+                calc_hour_ans = hand.get_angle()
+            if isinstance(hand, MinuteAngle):
+                calc_mins_ans = hand.get_angle()
+        ans = abs(calc_hour_ans - calc_mins_ans)
+        return min(360 - ans, ans)
 
 
 def main():
