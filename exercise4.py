@@ -59,8 +59,13 @@ class HourAngle(ClockAngle):
 
 
 class Clock:
-    def __init__(self, hourAngle=HourAngle()):
+    def __init__(self, hourAngle=HourAngle(), minuteAngle=MinuteAngle()):
         self.hour_ans = hourAngle
+        self.minute_ans = minuteAngle
+        self.hands = [
+            self.hour_ans,
+            self.minute_ans
+        ]
 
     def get_hour_ans(self):
         return self.hour_ans
@@ -72,7 +77,7 @@ class Clock:
     @staticmethod
     def convert_time(hour, minute):
         if 0 <= hour <= 24 and 0 <= minute <= 60:
-            if hour == 12:
+            if hour == 12 or hour == 24:
                 hour = 0
             if hour > 12:
                 hour -= 12
@@ -99,7 +104,10 @@ class Clock:
                     valid = False
             check_valid = (lambda x, y: x if x and valid else -1)
             if check_valid(ls, valid) != -1:
-                return cls(HourAngle(ls[0], MinuteAngle(ls[1])))
+                ls[0], ls[1] = Clock.convert_time(ls[0], ls[1])
+                hour_ans = HourAngle(ls[0], MinuteAngle(ls[1]))
+                mins_ans = MinuteAngle(ls[1])
+                return cls(hour_ans, mins_ans)
             else:
                 return -1
         else:
@@ -108,15 +116,12 @@ class Clock:
     # calculate angle between hour hand and minute hand
     def calc_angle(self):
         hour = self.hour_ans.get_hour()
-        minute = self.hour_ans.get_minute_ans().get_minute()
-        hour, minute = Clock.convert_time(hour, minute)
-        self.hour_ans.set_hour(hour)
-        self.hour_ans.get_minute_ans().set_minute(minute)
-        if self.hour_ans.get_hour() != -1 and self.hour_ans.get_minute_ans().get_minute() != -1:
-            calc_hour_ans = self.hour_ans.get_angle()
-            calc_mins_ans = self.hour_ans.get_minute_ans().get_angle()
-            result = abs(calc_hour_ans - calc_mins_ans)
-            return min(360 - result, result)
+        minute = self.minute_ans.get_minute()
+        if hour != -1 and minute != -1:
+            ans = 0
+            for hand in self.hands:
+                ans = abs(ans - hand.get_angle())
+            return min(360 - ans, ans)
         else:
             return -1
 
