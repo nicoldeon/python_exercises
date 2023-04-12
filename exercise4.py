@@ -59,7 +59,7 @@ class HourAngle(ClockAngle):
 
 
 class Clock:
-    def __init__(self, ls_hands=None):
+    def __init__(self, ls_hands=[]):
         self.ls_hands = ls_hands
 
     def get_ls_ans_hands(self):
