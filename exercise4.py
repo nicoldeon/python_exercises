@@ -99,11 +99,14 @@ class Clock:
                     valid = False
             check_valid = (lambda x, y: x if x and valid else -1)
             if check_valid(ls, valid) != -1:
-                ls[0], ls[1] = Clock.convert_time(ls[0], ls[1])
-                hour_ans = HourAngle(ls[0], MinuteAngle(ls[1]))
-                mins_ans = MinuteAngle(ls[1])
-                ls_angle = [hour_ans, mins_ans]
-                return cls(ls_angle)
+                hour, minute = Clock.convert_time(ls[0], ls[1])
+                if hour != -1 and minute != -1:
+                    hour_ans = HourAngle(hour, MinuteAngle(minute))
+                    mins_ans = MinuteAngle(minute)
+                    ls_angle = [hour_ans, mins_ans]
+                    return cls(ls_angle)
+                else:
+                    return -1
             else:
                 return -1
         else:
