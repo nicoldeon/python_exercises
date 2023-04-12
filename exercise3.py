@@ -18,12 +18,13 @@ class Number(ABC):
             print("Please input a positive number!")
 
     @classmethod
-    def read_from_file(self, url_path='exercise3.txt', *agrs, **kwargs):
+    def read_from_file(cls, url_path='exercise3.txt', *agrs, **kwargs):
         check_valid = True
         num = 0
-
+        if agrs:
+            url_path = agrs[0]
         if os.path.exists(url_path):
-            with open(url_path, *agrs, **kwargs) as file:
+            with open(url_path, **kwargs) as file:
                 for line in file:
                     for ele in line.split():
                         try:
@@ -32,7 +33,7 @@ class Number(ABC):
                             check_valid = False
 
             if num != 0 and check_valid:
-                return num
+                return cls(num)
             else:
                 return -1
         else:
@@ -108,16 +109,14 @@ class PrimeFactor(Number):
 
 
 def main():
-    num = 0
     n = len(sys.argv)
 
     if n > 1:
-        num = PrimeFactor.read_from_file(sys.argv[1], mode='r')
+        prime_factor = PrimeFactor.read_from_file(sys.argv[1], mode='r')
     else:
-        num = PrimeFactor.read_from_file(mode='r')
+        prime_factor = PrimeFactor.read_from_file(mode='r')
 
-    if num != -1:
-        prime_factor = PrimeFactor(num)
+    if prime_factor != -1:
         prime_factor.print_prime_factor()
     else:
         print("You have to input valid number!")
